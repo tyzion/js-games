@@ -1,30 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     const squares = document.querySelectorAll('.grid div')
-    const result = document.querySelector('#result')
-    const displayCurrentPlayer = document.getElementById('current-player')
+    const displayCurrentPlayer = document.querySelector('#current-player')
+    const result = document.querySelector('result')
     let currentPlayer = 1
+    displayCurrentPlayer.innerHTML = currentPlayer
+
 
     for (let i = 0; i < squares.length; i++) {
-        squares[i].addEventListener('mouseup', () => {
-            if(squares[i + 7].classList.contains('taken')){
-
-                if( currentPlayer == 1  &&  !squares[i].classList.contains('player-two') ) {
-                    squares[i].classList.add('player-one', 'taken')
-                    
+        squares[i].addEventListener('click', () => {
+            if (!squares[i].classList.contains('taken') && (squares[i+7].classList.contains('taken')) ) {
+                
+                if (currentPlayer == 1 ) {
+                    squares[i].classList.add('taken', 'player-one')
                     currentPlayer = 2
                     displayCurrentPlayer.innerHTML = currentPlayer
-                } 
-                
-                else if( !squares[i].classList.contains('player-one') ) {
-                    squares[i].classList.add('player-two', 'taken')
-
+                } else if ( !squares[i].classList.contains('taken') && squares[i+7].classList.contains('taken') ) {
+                    squares[i].classList.add('taken', 'player-two')
                     currentPlayer = 1
                     displayCurrentPlayer.innerHTML = currentPlayer
-                } else {
-                    alert("Oh no you don't!!")
                 }
             }
-            
+            else { alert("Wrong move big Guy") }
+
         })
     }
 
@@ -41,26 +38,39 @@ document.addEventListener('DOMContentLoaded', () => {
             [22, 23, 24, 25], [26, 25, 24, 23], [29, 30, 31, 32], [33, 32, 31, 30], [36, 37, 38, 39], [40, 39, 38, 37], [7, 14, 21, 28],
             [8, 15, 22, 29], [9, 16, 23, 30], [10, 17, 24, 31], [11, 18, 25, 32], [12, 19, 26, 33], [13, 20, 27, 34]
             ];
-
+        
         for (let i = 0; i < winningArrays.length; i++) {
             const square1 = squares[winningArrays[i][0]];
             const square2 = squares[winningArrays[i][1]];
             const square3 = squares[winningArrays[i][2]];
             const square4 = squares[winningArrays[i][3]];
 
-            if(square1.classList.contains('player-one') &&
-            square2.classList.contains('player-one') &&
-            square3.classList.contains('player-one') && 
-            square4.classList.contains('player-one') ) {
-                result.innerHTML = 'Player 1 won'
-            } else if(square1.classList.contains('player-two') &&
-            square2.classList.contains('player-two') &&
-            square3.classList.contains('player-two') && 
-            square4.classList.contains('player-two') ) {
-                result.innerHTML = 'Player 2 won'
+            if (square1.classList.contains('player-one') 
+            && square2.classList.contains('player-one') 
+            && square3.classList.contains('player-one') 
+            && square4.classList.contains('player-one') 
+            ) {
+                alert('Player 1 won')
+                restart()
+            } else if (square1.classList.contains('player-two') 
+            && square2.classList.contains('player-two') 
+            && square3.classList.contains('player-two') 
+            && square4.classList.contains('player-two') 
+            ) {
+                alert('Player 2 won')
+                restart()
             }
+            
         }
     }
 
     squares.forEach(square => square.addEventListener('click', checkBoard))
+
+    function restart() {
+        squares.forEach(square =>{
+            if (square.classList.contains('player-two') || square.classList.contains('player-one')) {
+                square.classList.remove('player-one', 'player-two', 'taken')
+            } 
+        })
+    }
 })
